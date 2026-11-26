@@ -23,51 +23,55 @@ class Smartphone:
         return result
 
     def processor_integration(self):
+
+        def processor_search(name):
+            result = self.search('Processor', 'CPU_ranking.csv', str(name))
+            if result.empty:
+                print("No cpu found")
+                return
+            elif len(result) > 1:
+                print(result['Processor'].reset_index(drop=True))
+                print("========================\n"
+                      "Choose one of these processors:")
+                index = str(input("Enter name or index of the cpu above: "))
+                if index.isdigit():
+                    if int(index) <= len(result) and int(index) > -1:
+                        print(result.iloc[int(index)]['Processor'])
+                        if len(result.iloc[int(index)]['Processor']) != None:
+                            while True:
+                                ask = str(input("Is this the processor you choose? (y/n): "))
+                                if ask.lower() == 'y':
+                                    return result.iloc[int(index)]
+                                elif ask.lower() == 'n':
+                                    break
+                                else:
+                                    print("Please enter y or n")
+                        else:
+                            pass
+                    else:
+                        print('Index out of range')
+
+                elif index.isdigit() == False:
+                    processor_search(index)
+
+            elif len(result) == 1:
+                print(result['Processor'])
+                while True:
+                    ask = str(input("Is this the processor you choose? (y/n): "))
+                    if ask.lower() == 'y':
+                        return result.iloc[0]
+                    elif ask.lower() == 'n':
+                        pass
+                    else:
+                        print("Please enter y or n")
+
         while True:
             name = str(input("Enter name of the cpu: "))
-            cpu = self.processor_search(name)
+            cpu = processor_search(name)
             if cpu is None:
                 pass
             else:
                 return cpu
-
-    def processor_search(self, name):
-        result = self.search('Processor', 'CPU_ranking.csv', str(name))
-        if result.empty:
-            print("No cpu found")
-            return
-        elif len(result) > 1:
-            print(result['Processor'].reset_index(drop=True))
-            print("========================\n"
-                  "Choose one of these processors:")
-            index = str(input("Enter name or index of the cpu above: "))
-            if index.isdigit():
-                print(result.iloc[int(index)]['Processor'])
-                if len(result.iloc[int(index)]['Processor']) != None:
-                    while True:
-                        ask = str(input("Is this the processor you choose? (y/n): "))
-                        if ask.lower() == 'y':
-                            return result.loc[int(index)]
-                        elif ask.lower() == 'n':
-                            break
-                        else:
-                            print("Please enter y or n")
-
-                else:
-                    pass
-            elif index.isdigit() == False:
-                self.processor_search(index)
-
-        elif len(result) == 1:
-            print(result['Processor'])
-            while True:
-                ask = str(input("Is this the processor you choose? (y/n): "))
-                if ask.lower() == 'y':
-                    return result.loc[0]
-                elif ask.lower() == 'n':
-                    pass
-                else:
-                    print("Please enter y or n")
 
     def add_smartphone(self):
         print("Enter Details of Smartphone (Specs)")
@@ -126,3 +130,5 @@ try:
     main()
 except ValueError:
     print('Please enter a valid choice')
+except IndexError:
+    print('Please enter in the range')
