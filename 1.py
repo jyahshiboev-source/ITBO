@@ -111,7 +111,9 @@ def main():
         choice = int(input('Enter your choice: '))
         if choice == 1:
             print('============================')
-            print(result.get_df().loc[result.get_df()["Name"] != None, ['Name','Processor', 'RAM', 'Storage', 'Camera', 'Battery', 'Display', 'Price']])
+            print(result.get_df().loc[
+                      result.get_df()["Name"] != None, ['Name', 'Processor', 'RAM', 'Storage', 'Camera', 'Battery',
+                                                        'Display', 'Price']])
             print('============================\n\n\n')
 
 
@@ -126,6 +128,8 @@ def main():
 
         else:
             raise ValueError
+
+
 try:
     main()
 except ValueError:
